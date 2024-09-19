@@ -1,0 +1,79 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-b442c4424293d0ef6f0b.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "bmstu_ComputerManager",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "bmstu_ComputerManager::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-bmstu_ComputerManager-Debug-4be952c32b873a8f9496.json",
+					"name" : "bmstu_ComputerManager",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "bmstu_ComputerManager_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-bmstu_ComputerManager_autogen-Debug-ddc769f3f1f6d2737121.json",
+					"name" : "bmstu_ComputerManager_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "bmstu_ComputerManager_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-bmstu_ComputerManager_autogen_timestamp_deps-Debug-86e1a8222389fe8b77e2.json",
+					"name" : "bmstu_ComputerManager_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/dehart/BMSTU/bmstu_ComputerManager/build/Desktop-Debug",
+		"source" : "/home/dehart/BMSTU/bmstu_ComputerManager"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

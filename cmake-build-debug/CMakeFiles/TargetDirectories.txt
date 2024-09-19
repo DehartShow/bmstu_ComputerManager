@@ -1,0 +1,9 @@
+/home/dehart/BMSTU/bmstu_ComputerManager/cmake-build-debug/CMakeFiles/bmstu_ComputerManager.dir
+/home/dehart/BMSTU/bmstu_ComputerManager/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/dehart/BMSTU/bmstu_ComputerManager/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/dehart/BMSTU/bmstu_ComputerManager/cmake-build-debug/CMakeFiles/list_install_components.dir
+/home/dehart/BMSTU/bmstu_ComputerManager/cmake-build-debug/CMakeFiles/install.dir
+/home/dehart/BMSTU/bmstu_ComputerManager/cmake-build-debug/CMakeFiles/install/local.dir
+/home/dehart/BMSTU/bmstu_ComputerManager/cmake-build-debug/CMakeFiles/install/strip.dir
+/home/dehart/BMSTU/bmstu_ComputerManager/cmake-build-debug/CMakeFiles/bmstu_ComputerManager_autogen_timestamp_deps.dir
+/home/dehart/BMSTU/bmstu_ComputerManager/cmake-build-debug/CMakeFiles/bmstu_ComputerManager_autogen.dir
