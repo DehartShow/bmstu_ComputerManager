@@ -1,0 +1,42 @@
+# Exclude build output
+Debug/
+Release/
+x64/
+Win32/
+*.exe
+*.dll
+*.lib
+*.pdb
+*.obj
+*.ilk
+*.pch
+*.idb
+*.tlog
+*.recipe
+*.cache
+*.FileListAbsolute.txt
+*.GenerateResource.cache
+*.AssemblyAttributes.cpp
+
+# Exclude intermediate and temporary files
+*.tmp
+*.log
+.vs/
+
+# Exclude dependency management
+packages/
+
+# Exclude user-specific settings
+*.suo
+*.user
+*.csproj.user
+*.vcxproj.user
+
+# Exclude generated metadata
+*.metagen
+
+# potentially exclude project files if you use a different method for version control 
+#Project1.sln
+#Project1.vcxproj
+#Project1.vcxproj.filters
+
