@@ -1,7 +1,7 @@
 #pragma once
+#include <stdexcept>
 #include <string>
 #include <vector>
-#include <stdexcept>
 
 struct Computer {
   std::string type;
@@ -23,15 +23,19 @@ class ComputerManager {
   void addComputer(const Computer& computer);
   void removeComputer(const std::string& inventoryNumber);
   void deleteComputer(int index_nuber) {
-      computers.erase(computers.begin() + index_nuber);
+    computers.erase(computers.begin() + index_nuber);
   }
-  Computer editComputer( int index, const Computer& updatedComputer ){ 
-      for (const auto& c : computers) {
-      if (c.inventoryNumber == updatedComputer.inventoryNumber)
-        throw std::runtime_error("Inventory number must be unique");
+  Computer editComputer(int index, const Computer& updatedComputer) {
+    for (const auto& c : computers) {
+      if (c.inventoryNumber == updatedComputer.inventoryNumber &&
+          computers[index].inventoryNumber != updatedComputer.inventoryNumber)
+        throw std::runtime_error(
+            "Инвентаризационный номер должен быть уникальным");
     }
-      return computers[index] = updatedComputer;
+    return computers[index] = updatedComputer;
   }
   const std::vector<Computer>& getComputers() const;
   Computer getComputer(int index) const { return computers[index]; }
+
+  size_t getComputersCount() const { return computers.size(); }
 };

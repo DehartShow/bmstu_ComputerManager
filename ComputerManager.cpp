@@ -1,9 +1,9 @@
 #include "ComputerManager.h"
 
-#include "tinyxml2.h"  // Для работы с XML
-
 #include <fstream>
 #include <stdexcept>
+
+#include "tinyxml2.h"  // Для работы с XML
 
 using namespace tinyxml2;
 
@@ -59,7 +59,7 @@ void ComputerManager::addComputer(const Computer& computer) {
   // Проверка уникальности
   for (const auto& c : computers) {
     if (c.inventoryNumber == computer.inventoryNumber)
-      throw std::runtime_error("Inventory number must be unique");
+      throw std::runtime_error("Инвентаризационный номер должен быть уникален");
   }
   computers.push_back(computer);
 }
@@ -75,5 +75,3 @@ void ComputerManager::removeComputer(const std::string& inventoryNumber) {
 const std::vector<Computer>& ComputerManager::getComputers() const {
   return computers;
 }
-
-
