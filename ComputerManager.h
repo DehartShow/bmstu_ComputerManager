@@ -22,17 +22,30 @@ class ComputerManager {
   void saveToFile(const std::string& filename);
   void addComputer(const Computer& computer);
   void removeComputer(const std::string& inventoryNumber);
-  void deleteComputer(int index_nuber) {
-    computers.erase(computers.begin() + index_nuber);
+  void deleteComputer(const std::string inventoryNumber) {
+    for (int i = 0; i < computers.size(); ++i) {
+      if (computers[i].inventoryNumber == inventoryNumber) {
+        computers.erase(computers.begin() + i);
+      }
+    }
   }
-  Computer editComputer(int index, const Computer& updatedComputer) {
+  Computer editComputer(const std::string inventoryNumber, const Computer& updatedComputer) {
     for (const auto& c : computers) {
       if (c.inventoryNumber == updatedComputer.inventoryNumber &&
-          computers[index].inventoryNumber != updatedComputer.inventoryNumber)
+          inventoryNumber != updatedComputer.inventoryNumber) {
         throw std::runtime_error(
             "Инвентаризационный номер должен быть уникальным");
+      }
     }
-    return computers[index] = updatedComputer;
+    // Находим индекс и обновляем компьютер в коллекции
+    for (int i = 0; i < computers.size(); ++i) {
+      if (computers[i].inventoryNumber == inventoryNumber) {
+        computers[i] = updatedComputer;
+        return computers[i];  // Возвращаем обновленный объект
+      }
+    }
+    throw std::runtime_error(
+        "Компьютер с таким инвентаризационным номером не найден");
   }
   const std::vector<Computer>& getComputers() const;
   Computer getComputer(int index) const { return computers[index]; }

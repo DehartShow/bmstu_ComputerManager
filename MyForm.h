@@ -58,6 +58,11 @@ ref class Form1 : public System::Windows::Forms::Form {
  private:
   bool changesMade = false;  // Флаг, показывающий, были ли изменения
 
+  static bool MatchInventoryNumber(const Computer& comp,
+                                   const std::string& inventoryId) {
+    return comp.inventoryNumber == inventoryId;
+  }
+
   void InitializeComponent(void) {
     this->Text = "Учет компьютеров";
     this->Width = 1115;
@@ -147,6 +152,8 @@ ref class Form1 : public System::Windows::Forms::Form {
     dataGridView->Columns->Add("MACAddress", "MAC адрес");
     dataGridView->Columns->Add("OS", "ОС");
     dataGridView->Columns->Add("Date", "Дата");
+
+
     dataGridView->Rows->Clear();
     for (const auto& computer : manager->getComputers()) {
       dataGridView->Rows->Add(gcnew String(computer.type.c_str()),
@@ -204,22 +211,24 @@ ref class Form1 : public System::Windows::Forms::Form {
   // Метод для внесения данных в TextBoxes для выбранного элемента
   void OnSelectionChanged(Object ^ sender, EventArgs ^ e) {
     if (dataGridView->SelectedRows->Count > 0) {
-      int selectedIndex = dataGridView->SelectedRows[0]->Index;
+      String ^ inventoryIdCLI = dataGridView->SelectedRows[0]
+                                    ->Cells["InventoryNumber"]
+                                    ->Value->ToString();
+      std::string inventoryId =
+          msclr::interop::marshal_as<std::string>(inventoryIdCLI);
 
-      // Проверяем, что индекс находится в пределах массива
-      if (selectedIndex >= 0 && selectedIndex < manager->getComputersCount()) {
-        Computer selectedComputer = manager->getComputers()[selectedIndex];
-
-        // Заполняем текстовые поля
-        typeBox->Text = gcnew String(selectedComputer.type.c_str());
-        inventoryNumberBox->Text =
-            gcnew String(selectedComputer.inventoryNumber.c_str());
-        manufacturerBox->Text =
-            gcnew String(selectedComputer.manufacturer.c_str());
-        modelBox->Text = gcnew String(selectedComputer.model.c_str());
-        macAddressBox->Text = gcnew String(selectedComputer.macAddress.c_str());
-        osBox->Text = gcnew String(selectedComputer.os.c_str());
-        dateBox->Text = gcnew String(selectedComputer.date.c_str());
+      auto& computers = manager->getComputers();
+      for (const auto& comp : computers) {
+        if (comp.inventoryNumber == inventoryId) {
+          typeBox->Text = gcnew String(comp.type.c_str());
+          inventoryNumberBox->Text = gcnew String(comp.inventoryNumber.c_str());
+          manufacturerBox->Text = gcnew String(comp.manufacturer.c_str());
+          modelBox->Text = gcnew String(comp.model.c_str());
+          macAddressBox->Text = gcnew String(comp.macAddress.c_str());
+          osBox->Text = gcnew String(comp.os.c_str());
+          dateBox->Text = gcnew String(comp.date.c_str());
+          break;
+        }
       }
     }
   }
@@ -236,6 +245,11 @@ ref class Form1 : public System::Windows::Forms::Form {
 
       // Получаем индекс выбранной строки
       int selectedIndex = dataGridView->SelectedRows[0]->Index;
+      String ^ inventoryNumberStr = dataGridView->SelectedRows[0]
+                                        ->Cells["InventoryNumber"]
+                                        ->Value->ToString();
+      std::string inventoryNumber =
+          msclr::interop::marshal_as<std::string>(inventoryNumberStr);
 
       // Проверяем, что индекс в допустимом диапазоне
       if (selectedIndex < 0 || selectedIndex >= manager->getComputersCount()) {
@@ -250,10 +264,10 @@ ref class Form1 : public System::Windows::Forms::Form {
                            MessageBoxIcon::Question);
       if (result == System::Windows::Forms::DialogResult::Yes) {
         // Удаляем компьютер из менеджера
-        manager->deleteComputer(selectedIndex);
+        manager->deleteComputer(inventoryNumber);
         // Обновляем данные в таблице
         LoadDataToGrid();
-
+        changesMade = true;
         MessageBox::Show("Данные успешно удалены!", "Успех",
                          MessageBoxButtons::OK, MessageBoxIcon::Information);
       }
@@ -275,6 +289,12 @@ ref class Form1 : public System::Windows::Forms::Form {
       }
       // Получаем индекс выбранной строки
       int selectedIndex = dataGridView->SelectedRows[0]->Index;
+
+      String ^ inventoryNumberStr = dataGridView->SelectedRows[0]
+                                        ->Cells["InventoryNumber"]
+                                        ->Value->ToString();
+      std::string inventoryNumber =
+          msclr::interop::marshal_as<std::string>(inventoryNumberStr);
       // Проверяем, что индекс находится в допустимом диапазоне
       if (selectedIndex < 0 || selectedIndex >= manager->getComputersCount()) {
         MessageBox::Show("Неверный индекс выбранной строки.", "Ошибка",
@@ -296,10 +316,11 @@ ref class Form1 : public System::Windows::Forms::Form {
       computer.date = msclr::interop::marshal_as<std::string>(dateBox->Text);
 
       // Обновляем компьютер в менеджере (в коллекции)
-      manager->editComputer(selectedIndex, computer);
+      manager->editComputer(inventoryNumber, computer);
 
       // Обновляем данные в таблице
       LoadDataToGrid();
+      changesMade = true;
 
       MessageBox::Show("Данные успешно обновлены!", "Успех",
                        MessageBoxButtons::OK, MessageBoxIcon::Information);
@@ -315,15 +336,11 @@ ref class Form1 : public System::Windows::Forms::Form {
       manager->saveToFile("computers.xml");
       MessageBox::Show("Данные сохранены!", "Успех", MessageBoxButtons::OK,
                        MessageBoxIcon::Information);
+      changesMade = false;
     } catch (const std::exception& e) {
       MessageBox::Show(gcnew String(e.what()), "Ошибка", MessageBoxButtons::OK,
                        MessageBoxIcon::Error);
     }
-  }
-
-  // Метод для обновления флага изменения
-  void OnEdit() {
-    changesMade = true;  // Устанавливаем флаг в true, если были изменения
   }
 
   // Метод для обработки события закрытия формы
