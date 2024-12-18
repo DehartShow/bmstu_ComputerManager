@@ -40,7 +40,7 @@ ref class Form1 : public System::Windows::Forms::Form {
     dataGridView->SelectionChanged +=
         gcnew EventHandler(this, &Form1::OnSelectionChanged);
 
-    // Загрузка данных из XML
+    // Загрузка данных XML
     try {
       manager->loadFromFile("computers.xml");
       LoadDataToGrid();
