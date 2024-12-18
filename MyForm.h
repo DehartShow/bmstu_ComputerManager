@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include <msclr/marshal_cppstd.h>
 
 #include "ComputerManager.h"
@@ -16,7 +16,7 @@ ref class Form1 : public System::Windows::Forms::Form {
  private:
   ComputerManager* manager;
 
-  // Элементы интерфейса
+  // Р­Р»РµРјРµРЅС‚С‹ РёРЅС‚РµСЂС„РµР№СЃР°
   DataGridView ^ dataGridView;
   TextBox ^ typeBox;
   TextBox ^ inventoryNumberBox;
@@ -40,15 +40,15 @@ ref class Form1 : public System::Windows::Forms::Form {
     dataGridView->SelectionChanged +=
         gcnew EventHandler(this, &Form1::OnSelectionChanged);
 
-    // Загрузка данных XML
+    // Р—Р°РіСЂСѓР·РєР° РґР°РЅРЅС‹С… XML
     try {
       manager->loadFromFile("computers.xml");
       LoadDataToGrid();
     } catch (const std::exception& e) {
       MessageBox::Show(
-          "Файла базы даннх нет. Он будет создан автоматически, после "
-          "сохранения данных.",
-          "Информация", MessageBoxButtons::OK, MessageBoxIcon::Information);
+          "Р¤Р°Р№Р»Р° Р±Р°Р·С‹ РґР°РЅРЅС… РЅРµС‚. РћРЅ Р±СѓРґРµС‚ СЃРѕР·РґР°РЅ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё, РїРѕСЃР»Рµ "
+          "СЃРѕС…СЂР°РЅРµРЅРёСЏ РґР°РЅРЅС‹С….",
+          "РРЅС„РѕСЂРјР°С†РёСЏ", MessageBoxButtons::OK, MessageBoxIcon::Information);
     }
   }
 
@@ -56,7 +56,7 @@ ref class Form1 : public System::Windows::Forms::Form {
   ~Form1() { delete manager; }
 
  private:
-  bool changesMade = false;  // Флаг, показывающий, были ли изменения
+  bool changesMade = false;  // Р¤Р»Р°Рі, РїРѕРєР°Р·С‹РІР°СЋС‰РёР№, Р±С‹Р»Рё Р»Рё РёР·РјРµРЅРµРЅРёСЏ
 
   static bool MatchInventoryNumber(const Computer& comp,
                                    const std::string& inventoryId) {
@@ -64,17 +64,17 @@ ref class Form1 : public System::Windows::Forms::Form {
   }
 
   void InitializeComponent(void) {
-    this->Text = "Учет компьютеров";
+    this->Text = "РЈС‡РµС‚ РєРѕРјРїСЊСЋС‚РµСЂРѕРІ";
     this->Width = 1115;
     this->Height = 450;
     this->FormBorderStyle =
-        System::Windows::Forms::FormBorderStyle::FixedSingle;  // Фиксированный
-                                                               // размер окна
-    this->MaximizeBox = false;  // Отключить кнопку максимизации
+        System::Windows::Forms::FormBorderStyle::FixedSingle;  // Р¤РёРєСЃРёСЂРѕРІР°РЅРЅС‹Р№
+                                                               // СЂР°Р·РјРµСЂ РѕРєРЅР°
+    this->MaximizeBox = false;  // РћС‚РєР»СЋС‡РёС‚СЊ РєРЅРѕРїРєСѓ РјР°РєСЃРёРјРёР·Р°С†РёРё
 
     this->FormClosing +=
         gcnew FormClosingEventHandler(this, &Form1::OnFormClosing);
-    // Дополнительный код инициализации формы
+    // Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Р№ РєРѕРґ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё С„РѕСЂРјС‹
 
     // DataGridView
     dataGridView = gcnew DataGridView();
@@ -84,34 +84,34 @@ ref class Form1 : public System::Windows::Forms::Form {
     dataGridView->AllowUserToAddRows = true;
     this->Controls->Add(dataGridView);
 
-    // Поля ввода
-    typeBox = CreateTextBox("Тип компьютера", 770, 40);
-    inventoryNumberBox = CreateTextBox("Инв. номер", 770 + 110, 40);
-    manufacturerBox = CreateTextBox("Производитель", 770 + 110 * 2, 40);
-    modelBox = CreateTextBox("Модель", 770, 100);
-    macAddressBox = CreateTextBox("MAC адрес", 770 + 110, 100);
-    osBox = CreateTextBox("ОС", 770 + 110 * 2, 100);
-    dateBox = CreateTextBox("Дата", 770, 160);
+    // РџРѕР»СЏ РІРІРѕРґР°
+    typeBox = CreateTextBox("РўРёРї РєРѕРјРїСЊСЋС‚РµСЂР°", 770, 40);
+    inventoryNumberBox = CreateTextBox("РРЅРІ. РЅРѕРјРµСЂ", 770 + 110, 40);
+    manufacturerBox = CreateTextBox("РџСЂРѕРёР·РІРѕРґРёС‚РµР»СЊ", 770 + 110 * 2, 40);
+    modelBox = CreateTextBox("РњРѕРґРµР»СЊ", 770, 100);
+    macAddressBox = CreateTextBox("MAC Р°РґСЂРµСЃ", 770 + 110, 100);
+    osBox = CreateTextBox("РћРЎ", 770 + 110 * 2, 100);
+    dateBox = CreateTextBox("Р”Р°С‚Р°", 770, 160);
 
-    // Кнопки
-    clearButton = CreateButton("Очистить поля", 770, 200, Color::Gray);
+    // РљРЅРѕРїРєРё
+    clearButton = CreateButton("РћС‡РёСЃС‚РёС‚СЊ РїРѕР»СЏ", 770, 200, Color::Gray);
     clearButton->Click += gcnew EventHandler(this, &Form1::OnClearButtonClick);
 
-    addButton = CreateButton("Добавить", 770, 240, Color::MediumSeaGreen);
+    addButton = CreateButton("Р”РѕР±Р°РІРёС‚СЊ", 770, 240, Color::MediumSeaGreen);
     addButton->Click += gcnew EventHandler(this, &Form1::OnAddButtonClick);
 
-    editButton = CreateButton("Редактировать", 770, 280, Color::Orange);
+    editButton = CreateButton("Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ", 770, 280, Color::Orange);
     editButton->Click += gcnew EventHandler(this, &Form1::OnEditButtonClick);
 
-    deleteButton = CreateButton("Удалить", 770, 320, Color::Tomato);
+    deleteButton = CreateButton("РЈРґР°Р»РёС‚СЊ", 770, 320, Color::Tomato);
     deleteButton->Click +=
         gcnew EventHandler(this, &Form1::OnDeleteButtonClick);
 
-    saveButton = CreateButton("Сохранить", 770, 360, Color::DodgerBlue);
+    saveButton = CreateButton("РЎРѕС…СЂР°РЅРёС‚СЊ", 770, 360, Color::DodgerBlue);
     saveButton->Click += gcnew EventHandler(this, &Form1::OnSaveButtonClick);
   }
 
-  // Создание TextBox с Label
+  // РЎРѕР·РґР°РЅРёРµ TextBox СЃ Label
   TextBox ^
       CreateTextBox(String ^ label, int x, int y) {
         Label ^ lbl = gcnew Label();
@@ -128,7 +128,7 @@ ref class Form1 : public System::Windows::Forms::Form {
         return box;
       }
 
-      // Создание Button
+      // РЎРѕР·РґР°РЅРёРµ Button
       Button
       ^
       CreateButton(String ^ text, int x, int y, Color color) {
@@ -142,16 +142,16 @@ ref class Form1 : public System::Windows::Forms::Form {
         return btn;
       }
 
-      // Загрузка данных в DataGridView
+      // Р—Р°РіСЂСѓР·РєР° РґР°РЅРЅС‹С… РІ DataGridView
       void LoadDataToGrid() {
     dataGridView->Columns->Clear();
-    dataGridView->Columns->Add("Type", "Тип");
-    dataGridView->Columns->Add("InventoryNumber", "Инв. номер");
-    dataGridView->Columns->Add("Manufacturer", "Производитель");
-    dataGridView->Columns->Add("Model", "Модель");
-    dataGridView->Columns->Add("MACAddress", "MAC адрес");
-    dataGridView->Columns->Add("OS", "ОС");
-    dataGridView->Columns->Add("Date", "Дата");
+    dataGridView->Columns->Add("Type", "РўРёРї");
+    dataGridView->Columns->Add("InventoryNumber", "РРЅРІ. РЅРѕРјРµСЂ");
+    dataGridView->Columns->Add("Manufacturer", "РџСЂРѕРёР·РІРѕРґРёС‚РµР»СЊ");
+    dataGridView->Columns->Add("Model", "РњРѕРґРµР»СЊ");
+    dataGridView->Columns->Add("MACAddress", "MAC Р°РґСЂРµСЃ");
+    dataGridView->Columns->Add("OS", "РћРЎ");
+    dataGridView->Columns->Add("Date", "Р”Р°С‚Р°");
 
 
     dataGridView->Rows->Clear();
@@ -166,7 +166,7 @@ ref class Form1 : public System::Windows::Forms::Form {
     }
   }
 
-  // Метод для кнопки "Добавить"
+  // РњРµС‚РѕРґ РґР»СЏ РєРЅРѕРїРєРё "Р”РѕР±Р°РІРёС‚СЊ"
   void OnAddButtonClick(Object ^ sender, EventArgs ^ e) {
     try {
       Computer computer;
@@ -183,17 +183,17 @@ ref class Form1 : public System::Windows::Forms::Form {
 
       manager->addComputer(computer);
       LoadDataToGrid();
-      // Пример обработки добавления, который изменяет данные
+      // РџСЂРёРјРµСЂ РѕР±СЂР°Р±РѕС‚РєРё РґРѕР±Р°РІР»РµРЅРёСЏ, РєРѕС‚РѕСЂС‹Р№ РёР·РјРµРЅСЏРµС‚ РґР°РЅРЅС‹Рµ
       changesMade = true;
     } catch (const std::exception& e) {
-      MessageBox::Show(gcnew String(e.what()), "Ошибка", MessageBoxButtons::OK,
+      MessageBox::Show(gcnew String(e.what()), "РћС€РёР±РєР°", MessageBoxButtons::OK,
                        MessageBoxIcon::Error);
     }
   }
 
-  // Метод для кнопки "Очистить"
+  // РњРµС‚РѕРґ РґР»СЏ РєРЅРѕРїРєРё "РћС‡РёСЃС‚РёС‚СЊ"
   void OnClearButtonClick(Object ^ sender, EventArgs ^ e) {
-    // Очищаем содержимое всех текстовых полей
+    // РћС‡РёС‰Р°РµРј СЃРѕРґРµСЂР¶РёРјРѕРµ РІСЃРµС… С‚РµРєСЃС‚РѕРІС‹С… РїРѕР»РµР№
     typeBox->Clear();
     inventoryNumberBox->Clear();
     manufacturerBox->Clear();
@@ -202,13 +202,13 @@ ref class Form1 : public System::Windows::Forms::Form {
     osBox->Clear();
     dateBox->Clear();
 
-    // Сообщение об успешной очистке
-    // MessageBox::Show("Все поля очищены!", "Информация",
+    // РЎРѕРѕР±С‰РµРЅРёРµ РѕР± СѓСЃРїРµС€РЅРѕР№ РѕС‡РёСЃС‚РєРµ
+    // MessageBox::Show("Р’СЃРµ РїРѕР»СЏ РѕС‡РёС‰РµРЅС‹!", "РРЅС„РѕСЂРјР°С†РёСЏ",
     // MessageBoxButtons::OK,
     //               MessageBoxIcon::Information);
   }
 
-  // Метод для внесения данных в TextBoxes для выбранного элемента
+  // РњРµС‚РѕРґ РґР»СЏ РІРЅРµСЃРµРЅРёСЏ РґР°РЅРЅС‹С… РІ TextBoxes РґР»СЏ РІС‹Р±СЂР°РЅРЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р°
   void OnSelectionChanged(Object ^ sender, EventArgs ^ e) {
     if (dataGridView->SelectedRows->Count > 0) {
       String ^ inventoryIdCLI = dataGridView->SelectedRows[0]
@@ -233,17 +233,17 @@ ref class Form1 : public System::Windows::Forms::Form {
     }
   }
 
-  // Метод для кнопки "Удалить"
+  // РњРµС‚РѕРґ РґР»СЏ РєРЅРѕРїРєРё "РЈРґР°Р»РёС‚СЊ"
   void OnDeleteButtonClick(Object ^ sender, EventArgs ^ e) {
     try {
-      // Проверяем, выбрана ли строка в таблице
+      // РџСЂРѕРІРµСЂСЏРµРј, РІС‹Р±СЂР°РЅР° Р»Рё СЃС‚СЂРѕРєР° РІ С‚Р°Р±Р»РёС†Рµ
       if (dataGridView->SelectedRows->Count == 0) {
-        MessageBox::Show("Пожалуйста, выберите строку для удаления.", "Ошибка",
+        MessageBox::Show("РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІС‹Р±РµСЂРёС‚Рµ СЃС‚СЂРѕРєСѓ РґР»СЏ СѓРґР°Р»РµРЅРёСЏ.", "РћС€РёР±РєР°",
                          MessageBoxButtons::OK, MessageBoxIcon::Warning);
         return;
       }
 
-      // Получаем индекс выбранной строки
+      // РџРѕР»СѓС‡Р°РµРј РёРЅРґРµРєСЃ РІС‹Р±СЂР°РЅРЅРѕР№ СЃС‚СЂРѕРєРё
       int selectedIndex = dataGridView->SelectedRows[0]->Index;
       String ^ inventoryNumberStr = dataGridView->SelectedRows[0]
                                         ->Cells["InventoryNumber"]
@@ -251,43 +251,43 @@ ref class Form1 : public System::Windows::Forms::Form {
       std::string inventoryNumber =
           msclr::interop::marshal_as<std::string>(inventoryNumberStr);
 
-      // Проверяем, что индекс в допустимом диапазоне
+      // РџСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ РёРЅРґРµРєСЃ РІ РґРѕРїСѓСЃС‚РёРјРѕРј РґРёР°РїР°Р·РѕРЅРµ
       if (selectedIndex < 0 || selectedIndex >= manager->getComputersCount()) {
-        MessageBox::Show("Неверный индекс выбранной строки.", "Ошибка",
+        MessageBox::Show("РќРµРІРµСЂРЅС‹Р№ РёРЅРґРµРєСЃ РІС‹Р±СЂР°РЅРЅРѕР№ СЃС‚СЂРѕРєРё.", "РћС€РёР±РєР°",
                          MessageBoxButtons::OK, MessageBoxIcon::Error);
         return;
       }
-      // Подтверждение удаления
+      // РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ СѓРґР°Р»РµРЅРёСЏ
       auto result =
-          MessageBox::Show("Вы уверены, что хотите удалить выбранную запись?",
-                           "Подтверждение удаления", MessageBoxButtons::YesNo,
+          MessageBox::Show("Р’С‹ СѓРІРµСЂРµРЅС‹, С‡С‚Рѕ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ РІС‹Р±СЂР°РЅРЅСѓСЋ Р·Р°РїРёСЃСЊ?",
+                           "РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ СѓРґР°Р»РµРЅРёСЏ", MessageBoxButtons::YesNo,
                            MessageBoxIcon::Question);
       if (result == System::Windows::Forms::DialogResult::Yes) {
-        // Удаляем компьютер из менеджера
+        // РЈРґР°Р»СЏРµРј РєРѕРјРїСЊСЋС‚РµСЂ РёР· РјРµРЅРµРґР¶РµСЂР°
         manager->deleteComputer(inventoryNumber);
-        // Обновляем данные в таблице
+        // РћР±РЅРѕРІР»СЏРµРј РґР°РЅРЅС‹Рµ РІ С‚Р°Р±Р»РёС†Рµ
         LoadDataToGrid();
         changesMade = true;
-        MessageBox::Show("Данные успешно удалены!", "Успех",
+        MessageBox::Show("Р”Р°РЅРЅС‹Рµ СѓСЃРїРµС€РЅРѕ СѓРґР°Р»РµРЅС‹!", "РЈСЃРїРµС…",
                          MessageBoxButtons::OK, MessageBoxIcon::Information);
       }
     } catch (const std::exception& e) {
-      MessageBox::Show(gcnew String(e.what()), "Ошибка", MessageBoxButtons::OK,
+      MessageBox::Show(gcnew String(e.what()), "РћС€РёР±РєР°", MessageBoxButtons::OK,
                        MessageBoxIcon::Error);
     }
   }
 
-  // Метод для кнопки "Редактировать"
+  // РњРµС‚РѕРґ РґР»СЏ РєРЅРѕРїРєРё "Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ"
   void OnEditButtonClick(Object ^ sender, EventArgs ^ e) {
     try {
-      // Проверяем, выбрана ли строка в таблице
+      // РџСЂРѕРІРµСЂСЏРµРј, РІС‹Р±СЂР°РЅР° Р»Рё СЃС‚СЂРѕРєР° РІ С‚Р°Р±Р»РёС†Рµ
       if (dataGridView->SelectedRows->Count == 0) {
-        MessageBox::Show("Пожалуйста, выберите строку для редактирования.",
-                         "Ошибка", MessageBoxButtons::OK,
+        MessageBox::Show("РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РІС‹Р±РµСЂРёС‚Рµ СЃС‚СЂРѕРєСѓ РґР»СЏ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ.",
+                         "РћС€РёР±РєР°", MessageBoxButtons::OK,
                          MessageBoxIcon::Warning);
-        return;  // Прерываем выполнение, если ничего не выбрано
+        return;  // РџСЂРµСЂС‹РІР°РµРј РІС‹РїРѕР»РЅРµРЅРёРµ, РµСЃР»Рё РЅРёС‡РµРіРѕ РЅРµ РІС‹Р±СЂР°РЅРѕ
       }
-      // Получаем индекс выбранной строки
+      // РџРѕР»СѓС‡Р°РµРј РёРЅРґРµРєСЃ РІС‹Р±СЂР°РЅРЅРѕР№ СЃС‚СЂРѕРєРё
       int selectedIndex = dataGridView->SelectedRows[0]->Index;
 
       String ^ inventoryNumberStr = dataGridView->SelectedRows[0]
@@ -295,14 +295,14 @@ ref class Form1 : public System::Windows::Forms::Form {
                                         ->Value->ToString();
       std::string inventoryNumber =
           msclr::interop::marshal_as<std::string>(inventoryNumberStr);
-      // Проверяем, что индекс находится в допустимом диапазоне
+      // РџСЂРѕРІРµСЂСЏРµРј, С‡С‚Рѕ РёРЅРґРµРєСЃ РЅР°С…РѕРґРёС‚СЃСЏ РІ РґРѕРїСѓСЃС‚РёРјРѕРј РґРёР°РїР°Р·РѕРЅРµ
       if (selectedIndex < 0 || selectedIndex >= manager->getComputersCount()) {
-        MessageBox::Show("Неверный индекс выбранной строки.", "Ошибка",
+        MessageBox::Show("РќРµРІРµСЂРЅС‹Р№ РёРЅРґРµРєСЃ РІС‹Р±СЂР°РЅРЅРѕР№ СЃС‚СЂРѕРєРё.", "РћС€РёР±РєР°",
                          MessageBoxButtons::OK, MessageBoxIcon::Error);
         return;
       }
 
-      // Получаем данные из текстовых полей
+      // РџРѕР»СѓС‡Р°РµРј РґР°РЅРЅС‹Рµ РёР· С‚РµРєСЃС‚РѕРІС‹С… РїРѕР»РµР№
       Computer computer;
       computer.type = msclr::interop::marshal_as<std::string>(typeBox->Text);
       computer.inventoryNumber =
@@ -315,50 +315,50 @@ ref class Form1 : public System::Windows::Forms::Form {
       computer.os = msclr::interop::marshal_as<std::string>(osBox->Text);
       computer.date = msclr::interop::marshal_as<std::string>(dateBox->Text);
 
-      // Обновляем компьютер в менеджере (в коллекции)
+      // РћР±РЅРѕРІР»СЏРµРј РєРѕРјРїСЊСЋС‚РµСЂ РІ РјРµРЅРµРґР¶РµСЂРµ (РІ РєРѕР»Р»РµРєС†РёРё)
       manager->editComputer(inventoryNumber, computer);
 
-      // Обновляем данные в таблице
+      // РћР±РЅРѕРІР»СЏРµРј РґР°РЅРЅС‹Рµ РІ С‚Р°Р±Р»РёС†Рµ
       LoadDataToGrid();
       changesMade = true;
 
-      MessageBox::Show("Данные успешно обновлены!", "Успех",
+      MessageBox::Show("Р”Р°РЅРЅС‹Рµ СѓСЃРїРµС€РЅРѕ РѕР±РЅРѕРІР»РµРЅС‹!", "РЈСЃРїРµС…",
                        MessageBoxButtons::OK, MessageBoxIcon::Information);
     } catch (const std::exception& e) {
-      MessageBox::Show(gcnew String(e.what()), "Ошибка", MessageBoxButtons::OK,
+      MessageBox::Show(gcnew String(e.what()), "РћС€РёР±РєР°", MessageBoxButtons::OK,
                        MessageBoxIcon::Error);
     }
   }
 
-  // Метод для кнопки "Сохранить"
+  // РњРµС‚РѕРґ РґР»СЏ РєРЅРѕРїРєРё "РЎРѕС…СЂР°РЅРёС‚СЊ"
   void OnSaveButtonClick(Object ^ sender, EventArgs ^ e) {
     try {
       manager->saveToFile("computers.xml");
-      MessageBox::Show("Данные сохранены!", "Успех", MessageBoxButtons::OK,
+      MessageBox::Show("Р”Р°РЅРЅС‹Рµ СЃРѕС…СЂР°РЅРµРЅС‹!", "РЈСЃРїРµС…", MessageBoxButtons::OK,
                        MessageBoxIcon::Information);
       changesMade = false;
     } catch (const std::exception& e) {
-      MessageBox::Show(gcnew String(e.what()), "Ошибка", MessageBoxButtons::OK,
+      MessageBox::Show(gcnew String(e.what()), "РћС€РёР±РєР°", MessageBoxButtons::OK,
                        MessageBoxIcon::Error);
     }
   }
 
-  // Метод для обработки события закрытия формы
+  // РњРµС‚РѕРґ РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё СЃРѕР±С‹С‚РёСЏ Р·Р°РєСЂС‹С‚РёСЏ С„РѕСЂРјС‹
   void OnFormClosing(Object ^ sender, FormClosingEventArgs ^ e) {
-    // Проверяем, были ли изменения
+    // РџСЂРѕРІРµСЂСЏРµРј, Р±С‹Р»Рё Р»Рё РёР·РјРµРЅРµРЅРёСЏ
     if (changesMade) {
-      // Показываем диалог с запросом на сохранение изменений
+      // РџРѕРєР°Р·С‹РІР°РµРј РґРёР°Р»РѕРі СЃ Р·Р°РїСЂРѕСЃРѕРј РЅР° СЃРѕС…СЂР°РЅРµРЅРёРµ РёР·РјРµРЅРµРЅРёР№
       auto result = MessageBox::Show(
-          "Есть несохраненные изменения. Сохранить?", "Подтверждение",
+          "Р•СЃС‚СЊ РЅРµСЃРѕС…СЂР°РЅРµРЅРЅС‹Рµ РёР·РјРµРЅРµРЅРёСЏ. РЎРѕС…СЂР°РЅРёС‚СЊ?", "РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ",
           MessageBoxButtons::YesNoCancel, MessageBoxIcon::Question);
 
       if (result == System::Windows::Forms::DialogResult::Yes) {
-        // Сохраняем данные
+        // РЎРѕС…СЂР°РЅСЏРµРј РґР°РЅРЅС‹Рµ
         manager->saveToFile("computers.xml");
-        MessageBox::Show("Данные сохранены.", "Успех", MessageBoxButtons::OK,
+        MessageBox::Show("Р”Р°РЅРЅС‹Рµ СЃРѕС…СЂР°РЅРµРЅС‹.", "РЈСЃРїРµС…", MessageBoxButtons::OK,
                          MessageBoxIcon::Information);
       } else if (result == System::Windows::Forms::DialogResult::Cancel) {
-        // Отменяем закрытие формы, если пользователь нажал "Отмена"
+        // РћС‚РјРµРЅСЏРµРј Р·Р°РєСЂС‹С‚РёРµ С„РѕСЂРјС‹, РµСЃР»Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅР°Р¶Р°Р» "РћС‚РјРµРЅР°"
         e->Cancel = true;
       }
     }

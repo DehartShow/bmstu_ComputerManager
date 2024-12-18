@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -34,18 +34,18 @@ class ComputerManager {
       if (c.inventoryNumber == updatedComputer.inventoryNumber &&
           inventoryNumber != updatedComputer.inventoryNumber) {
         throw std::runtime_error(
-            "Инвентаризационный номер должен быть уникальным");
+            "РРЅРІРµРЅС‚Р°СЂРёР·Р°С†РёРѕРЅРЅС‹Р№ РЅРѕРјРµСЂ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ СѓРЅРёРєР°Р»СЊРЅС‹Рј");
       }
     }
-    // Находим индекс и обновляем компьютер в коллекции
+    // РќР°С…РѕРґРёРј РёРЅРґРµРєСЃ Рё РѕР±РЅРѕРІР»СЏРµРј РєРѕРјРїСЊСЋС‚РµСЂ РІ РєРѕР»Р»РµРєС†РёРё
     for (int i = 0; i < computers.size(); ++i) {
       if (computers[i].inventoryNumber == inventoryNumber) {
         computers[i] = updatedComputer;
-        return computers[i];  // Возвращаем обновленный объект
+        return computers[i];  // Р’РѕР·РІСЂР°С‰Р°РµРј РѕР±РЅРѕРІР»РµРЅРЅС‹Р№ РѕР±СЉРµРєС‚
       }
     }
     throw std::runtime_error(
-        "Компьютер с таким инвентаризационным номером не найден");
+        "РљРѕРјРїСЊСЋС‚РµСЂ СЃ С‚Р°РєРёРј РёРЅРІРµРЅС‚Р°СЂРёР·Р°С†РёРѕРЅРЅС‹Рј РЅРѕРјРµСЂРѕРј РЅРµ РЅР°Р№РґРµРЅ");
   }
   const std::vector<Computer>& getComputers() const;
   Computer getComputer(int index) const { return computers[index]; }
