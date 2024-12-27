@@ -70,7 +70,7 @@ ref class Form1 : public System::Windows::Forms::Form {
 
   void InitializeComponent(void) {
     this->Text = "Учёт компьютеров";
-    this->Width = 1115;
+    this->Width = 1135;
     this->Height = 500;
     this->FormBorderStyle =
         System::Windows::Forms::FormBorderStyle::FixedSingle;  // Фиксированный
@@ -149,7 +149,7 @@ ref class Form1 : public System::Windows::Forms::Form {
 
         TextBox ^ box = gcnew TextBox();
         box->Location = Point(x, y);
-        box->Size = Drawing::Size(100, 25);
+        box->Size = Drawing::Size(100, 30);
         box->BackColor = Color::White;
         this->Controls->Add(box);
         return box;
