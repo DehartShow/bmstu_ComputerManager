@@ -32,6 +32,11 @@ ref class Form1 : public System::Windows::Forms::Form {
   Button ^ saveButton;
   Button ^ clearButton;
 
+  TextBox ^ searchBox;  // Поле для ввода поискового запроса
+  ComboBox ^ searchCriteriaBox;  // Выпадающий список для выбора параметра
+  Button ^ searchButton;  // Кнопка для поиска
+  Button ^ resetButton;
+
  public:
   Form1(void) {
     InitializeComponent();
@@ -40,9 +45,9 @@ ref class Form1 : public System::Windows::Forms::Form {
     dataGridView->SelectionChanged +=
         gcnew EventHandler(this, &Form1::OnSelectionChanged);
 
-    // Загрузка данных XML
+    // Загрузка данных из XML
     try {
-      manager->loadFromFile("computers.xml");
+      manager->loadFromFile(L"computers.xml");
       LoadDataToGrid();
     } catch (const std::exception& e) {
       MessageBox::Show(
@@ -59,14 +64,14 @@ ref class Form1 : public System::Windows::Forms::Form {
   bool changesMade = false;  // Флаг, показывающий, были ли изменения
 
   static bool MatchInventoryNumber(const Computer& comp,
-                                   const std::string& inventoryId) {
+                                   const std::wstring& inventoryId) {
     return comp.inventoryNumber == inventoryId;
   }
 
   void InitializeComponent(void) {
-    this->Text = "Учет компьютеров";
+    this->Text = "Учёт компьютеров";
     this->Width = 1115;
-    this->Height = 450;
+    this->Height = 500;
     this->FormBorderStyle =
         System::Windows::Forms::FormBorderStyle::FixedSingle;  // Фиксированный
                                                                // размер окна
@@ -109,6 +114,28 @@ ref class Form1 : public System::Windows::Forms::Form {
 
     saveButton = CreateButton("Сохранить", 770, 360, Color::DodgerBlue);
     saveButton->Click += gcnew EventHandler(this, &Form1::OnSaveButtonClick);
+
+    // Кнопка сброса
+    resetButton = CreateButton("Сбросить", 600, 420, Color::LightGray);
+    resetButton->Size = System::Drawing::Size(150, 30);
+    resetButton->Click += gcnew EventHandler(this, &Form1::OnResetButtonClick);
+
+    // Поле поиска
+    searchBox = CreateTextBox("Поиск", 10, 420);
+    searchCriteriaBox = gcnew ComboBox();
+    searchCriteriaBox->Location = Point(120, 420);
+    searchCriteriaBox->Size = Drawing::Size(150, 25);
+    searchCriteriaBox->DropDownStyle = ComboBoxStyle::DropDownList;
+    searchCriteriaBox->Items->AddRange(
+        gcnew array<String ^>{"Тип компьютера", "Инв. номер", "Производитель",
+                              "Модель", "MAC адрес", "ОС", "Дата"});
+    searchCriteriaBox->SelectedIndex = 0;
+    this->Controls->Add(searchCriteriaBox);
+
+    searchButton = CreateButton("Искать", 280, 420, Color::LightBlue);
+    searchButton->Click +=
+        gcnew EventHandler(this, &Form1::OnSearchButtonClick);
+
   }
 
   // Создание TextBox с Label
@@ -169,17 +196,28 @@ ref class Form1 : public System::Windows::Forms::Form {
   // Метод для кнопки "Добавить"
   void OnAddButtonClick(Object ^ sender, EventArgs ^ e) {
     try {
+      // Проверяем, заполнены ли все поля
+      if (typeBox->Text->Trim() == "" ||
+          inventoryNumberBox->Text->Trim() == "" ||
+          manufacturerBox->Text->Trim() == "" || modelBox->Text->Trim() == "" ||
+          macAddressBox->Text->Trim() == "" || osBox->Text->Trim() == "" ||
+          dateBox->Text->Trim() == "") {
+        MessageBox::Show("Все поля должны быть заполнены.", "Ошибка",
+                         MessageBoxButtons::OK, MessageBoxIcon::Warning);
+        return;  // Прерываем выполнение, если есть пустые поля
+      }
+
       Computer computer;
-      computer.type = msclr::interop::marshal_as<std::string>(typeBox->Text);
+      computer.type = msclr::interop::marshal_as<std::wstring>(typeBox->Text);
       computer.inventoryNumber =
-          msclr::interop::marshal_as<std::string>(inventoryNumberBox->Text);
+          msclr::interop::marshal_as<std::wstring>(inventoryNumberBox->Text);
       computer.manufacturer =
-          msclr::interop::marshal_as<std::string>(manufacturerBox->Text);
-      computer.model = msclr::interop::marshal_as<std::string>(modelBox->Text);
+          msclr::interop::marshal_as<std::wstring>(manufacturerBox->Text);
+      computer.model = msclr::interop::marshal_as<std::wstring>(modelBox->Text);
       computer.macAddress =
-          msclr::interop::marshal_as<std::string>(macAddressBox->Text);
-      computer.os = msclr::interop::marshal_as<std::string>(osBox->Text);
-      computer.date = msclr::interop::marshal_as<std::string>(dateBox->Text);
+          msclr::interop::marshal_as<std::wstring>(macAddressBox->Text);
+      computer.os = msclr::interop::marshal_as<std::wstring>(osBox->Text);
+      computer.date = msclr::interop::marshal_as<std::wstring>(dateBox->Text);
 
       manager->addComputer(computer);
       LoadDataToGrid();
@@ -214,8 +252,8 @@ ref class Form1 : public System::Windows::Forms::Form {
       String ^ inventoryIdCLI = dataGridView->SelectedRows[0]
                                     ->Cells["InventoryNumber"]
                                     ->Value->ToString();
-      std::string inventoryId =
-          msclr::interop::marshal_as<std::string>(inventoryIdCLI);
+      std::wstring inventoryId =
+          msclr::interop::marshal_as<std::wstring>(inventoryIdCLI);
 
       auto& computers = manager->getComputers();
       for (const auto& comp : computers) {
@@ -248,8 +286,8 @@ ref class Form1 : public System::Windows::Forms::Form {
       String ^ inventoryNumberStr = dataGridView->SelectedRows[0]
                                         ->Cells["InventoryNumber"]
                                         ->Value->ToString();
-      std::string inventoryNumber =
-          msclr::interop::marshal_as<std::string>(inventoryNumberStr);
+      std::wstring inventoryNumber =
+          msclr::interop::marshal_as<std::wstring>(inventoryNumberStr);
 
       // Проверяем, что индекс в допустимом диапазоне
       if (selectedIndex < 0 || selectedIndex >= manager->getComputersCount()) {
@@ -287,14 +325,31 @@ ref class Form1 : public System::Windows::Forms::Form {
                          MessageBoxIcon::Warning);
         return;  // Прерываем выполнение, если ничего не выбрано
       }
+      // Проверяем, заполнены ли все поля
+      if (typeBox->Text->Trim() == "" ||
+          inventoryNumberBox->Text->Trim() == "" ||
+          manufacturerBox->Text->Trim() == "" || modelBox->Text->Trim() == "" ||
+          macAddressBox->Text->Trim() == "" || osBox->Text->Trim() == "" ||
+          dateBox->Text->Trim() == "") {
+        MessageBox::Show("Все поля должны быть заполнены.", "Ошибка",
+                         MessageBoxButtons::OK, MessageBoxIcon::Warning);
+        return;  // Прерываем выполнение, если есть пустые поля
+      }
+
       // Получаем индекс выбранной строки
       int selectedIndex = dataGridView->SelectedRows[0]->Index;
 
       String ^ inventoryNumberStr = dataGridView->SelectedRows[0]
                                         ->Cells["InventoryNumber"]
                                         ->Value->ToString();
-      std::string inventoryNumber =
-          msclr::interop::marshal_as<std::string>(inventoryNumberStr);
+      std::wstring inventoryNumber =
+          msclr::interop::marshal_as<std::wstring>(inventoryNumberStr);
+
+      String ^ MacAddressStr =
+          dataGridView->SelectedRows[0]->Cells["MACAddress"]->Value->ToString();
+      std::wstring MacAddress =
+          msclr::interop::marshal_as<std::wstring>(MacAddressStr);
+
       // Проверяем, что индекс находится в допустимом диапазоне
       if (selectedIndex < 0 || selectedIndex >= manager->getComputersCount()) {
         MessageBox::Show("Неверный индекс выбранной строки.", "Ошибка",
@@ -304,19 +359,19 @@ ref class Form1 : public System::Windows::Forms::Form {
 
       // Получаем данные из текстовых полей
       Computer computer;
-      computer.type = msclr::interop::marshal_as<std::string>(typeBox->Text);
+      computer.type = msclr::interop::marshal_as<std::wstring>(typeBox->Text);
       computer.inventoryNumber =
-          msclr::interop::marshal_as<std::string>(inventoryNumberBox->Text);
+          msclr::interop::marshal_as<std::wstring>(inventoryNumberBox->Text);
       computer.manufacturer =
-          msclr::interop::marshal_as<std::string>(manufacturerBox->Text);
-      computer.model = msclr::interop::marshal_as<std::string>(modelBox->Text);
+          msclr::interop::marshal_as<std::wstring>(manufacturerBox->Text);
+      computer.model = msclr::interop::marshal_as<std::wstring>(modelBox->Text);
       computer.macAddress =
-          msclr::interop::marshal_as<std::string>(macAddressBox->Text);
-      computer.os = msclr::interop::marshal_as<std::string>(osBox->Text);
-      computer.date = msclr::interop::marshal_as<std::string>(dateBox->Text);
+          msclr::interop::marshal_as<std::wstring>(macAddressBox->Text);
+      computer.os = msclr::interop::marshal_as<std::wstring>(osBox->Text);
+      computer.date = msclr::interop::marshal_as<std::wstring>(dateBox->Text);
 
       // Обновляем компьютер в менеджере (в коллекции)
-      manager->editComputer(inventoryNumber, computer);
+      manager->editComputer(inventoryNumber, MacAddress, computer);
 
       // Обновляем данные в таблице
       LoadDataToGrid();
@@ -333,7 +388,7 @@ ref class Form1 : public System::Windows::Forms::Form {
   // Метод для кнопки "Сохранить"
   void OnSaveButtonClick(Object ^ sender, EventArgs ^ e) {
     try {
-      manager->saveToFile("computers.xml");
+      manager->saveToFile(L"computers.xml");
       MessageBox::Show("Данные сохранены!", "Успех", MessageBoxButtons::OK,
                        MessageBoxIcon::Information);
       changesMade = false;
@@ -354,7 +409,7 @@ ref class Form1 : public System::Windows::Forms::Form {
 
       if (result == System::Windows::Forms::DialogResult::Yes) {
         // Сохраняем данные
-        manager->saveToFile("computers.xml");
+        manager->saveToFile(L"computers.xml");
         MessageBox::Show("Данные сохранены.", "Успех", MessageBoxButtons::OK,
                          MessageBoxIcon::Information);
       } else if (result == System::Windows::Forms::DialogResult::Cancel) {
@@ -363,5 +418,58 @@ ref class Form1 : public System::Windows::Forms::Form {
       }
     }
   }
+
+  // Метод кнопки "Искать"
+  void OnSearchButtonClick(Object ^ sender, EventArgs ^ e) {
+    String ^ query = searchBox->Text->Trim();
+    String ^ selectedCriteria = searchCriteriaBox->SelectedItem->ToString();
+
+    if (query->Length == 0) {
+      MessageBox::Show("Введите текст для поиска.", "Ошибка",
+                       MessageBoxButtons::OK, MessageBoxIcon::Warning);
+      return;
+    }
+
+    // Переводим строку поиска и критерий в std::wstring
+    std::wstring queryW = msclr::interop::marshal_as<std::wstring>(query);
+    std::wstring criteriaW =
+        msclr::interop::marshal_as<std::wstring>(selectedCriteria);
+
+    // Фильтрация данных
+    auto filteredComputers = manager->filterComputers(criteriaW, queryW);
+
+    // Обновляем DataGridView с отфильтрованными данными
+    dataGridView->Rows->Clear();
+    for (const auto& computer : filteredComputers) {
+      dataGridView->Rows->Add(gcnew String(computer.type.c_str()),
+                              gcnew String(computer.inventoryNumber.c_str()),
+                              gcnew String(computer.manufacturer.c_str()),
+                              gcnew String(computer.model.c_str()),
+                              gcnew String(computer.macAddress.c_str()),
+                              gcnew String(computer.os.c_str()),
+                              gcnew String(computer.date.c_str()));
+    }
+  }
+
+  // Метод для кнопки "Сбросить"
+  void OnResetButtonClick(Object ^ sender, EventArgs ^ e) {
+    searchBox->Text = "";
+    searchCriteriaBox->SelectedIndex = -1;
+    dataGridView->Rows->Clear();
+
+    for (const auto& computer : manager->getComputers()) {
+      dataGridView->Rows->Add(gcnew String(computer.type.c_str()),
+                              gcnew String(computer.inventoryNumber.c_str()),
+                              gcnew String(computer.manufacturer.c_str()),
+                              gcnew String(computer.model.c_str()),
+                              gcnew String(computer.macAddress.c_str()),
+                              gcnew String(computer.os.c_str()),
+                              gcnew String(computer.date.c_str()));
+    }
+
+    MessageBox::Show("Результаты поиска сброшены.", "Информация", MessageBoxButtons::OK,
+                     MessageBoxIcon::Information);
+  }
+
 };
 }  // namespace ComputerManagementApp

@@ -4,13 +4,13 @@
 #include <vector>
 
 struct Computer {
-  std::string type;
-  std::string inventoryNumber;
-  std::string manufacturer;
-  std::string model;
-  std::string macAddress;
-  std::string os;
-  std::string date;
+  std::wstring type;
+  std::wstring inventoryNumber;
+  std::wstring manufacturer;
+  std::wstring model;
+  std::wstring macAddress;
+  std::wstring os;
+  std::wstring date;
 };
 
 class ComputerManager {
@@ -18,23 +18,27 @@ class ComputerManager {
   std::vector<Computer> computers;
 
  public:
-  void loadFromFile(const std::string& filename);
-  void saveToFile(const std::string& filename);
+  void loadFromFile(const std::wstring& filename);
+  void saveToFile(const std::wstring& filename);
   void addComputer(const Computer& computer);
-  void removeComputer(const std::string& inventoryNumber);
-  void deleteComputer(const std::string inventoryNumber) {
+  void removeComputer(const std::wstring& inventoryNumber);
+  void deleteComputer(const std::wstring inventoryNumber) {
     for (int i = 0; i < computers.size(); ++i) {
       if (computers[i].inventoryNumber == inventoryNumber) {
         computers.erase(computers.begin() + i);
       }
     }
   }
-  Computer editComputer(const std::string inventoryNumber, const Computer& updatedComputer) {
+  Computer editComputer(const std::wstring inventoryNumber,
+                        const std::wstring macadress,
+                        const Computer& updatedComputer) {
     for (const auto& c : computers) {
-      if (c.inventoryNumber == updatedComputer.inventoryNumber &&
-          inventoryNumber != updatedComputer.inventoryNumber) {
+      if ((c.inventoryNumber == updatedComputer.inventoryNumber &&
+           inventoryNumber != updatedComputer.inventoryNumber) ||
+          (c.macAddress == updatedComputer.macAddress &&
+           macadress != updatedComputer.macAddress)) {
         throw std::runtime_error(
-            "Инвентаризационный номер должен быть уникальным");
+            "Инвентаризационный номер и MAC-адрес должы быть уникальны");
       }
     }
     // Находим индекс и обновляем компьютер в коллекции
@@ -51,4 +55,32 @@ class ComputerManager {
   Computer getComputer(int index) const { return computers[index]; }
 
   size_t getComputersCount() const { return computers.size(); }
+
+  std::vector<Computer> filterComputers(const std::wstring& criteria,
+                                        const std::wstring& query) {
+    std::vector<Computer> filtered;
+    for (const auto& computer : computers) {
+      bool match = false;
+      if (criteria == L"Тип компьютера") {
+        match = computer.type.find(query) != std::wstring::npos;
+      } else if (criteria == L"Инв. номер") {
+        match = computer.inventoryNumber.find(query) != std::wstring::npos;
+      } else if (criteria == L"Производитель") {
+        match = computer.manufacturer.find(query) != std::wstring::npos;
+      } else if (criteria == L"Модель") {
+        match = computer.model.find(query) != std::wstring::npos;
+      } else if (criteria == L"MAC адрес") {
+        match = computer.macAddress.find(query) != std::wstring::npos;
+      } else if (criteria == L"ОС") {
+        match = computer.os.find(query) != std::wstring::npos;
+      } else if (criteria == L"Дата") {
+        match = computer.date.find(query) != std::wstring::npos;
+      }
+
+      if (match) {
+        filtered.push_back(computer);
+      }
+    }
+    return filtered;
+  }
 };
