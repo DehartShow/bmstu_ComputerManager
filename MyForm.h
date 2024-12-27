@@ -388,6 +388,12 @@ ref class Form1 : public System::Windows::Forms::Form {
   // Метод для кнопки "Сохранить"
   void OnSaveButtonClick(Object ^ sender, EventArgs ^ e) {
     try {
+      if (dataGridView->Rows->Count == 0) {
+        MessageBox::Show("Нет данных для сохранения.", "Предупреждение",
+                         MessageBoxButtons::OK, MessageBoxIcon::Warning);
+        return;
+      }
+
       manager->saveToFile(L"computers.xml");
       MessageBox::Show("Данные сохранены!", "Успех", MessageBoxButtons::OK,
                        MessageBoxIcon::Information);
